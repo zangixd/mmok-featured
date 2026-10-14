@@ -32,6 +32,15 @@ function verify(rawBody: string, header: string, secret: string): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
+async function resolveThumb(mapId: number): Promise<string> {
+  const url = `https://user-assets.krunker.io/m${mapId}/thumb.png`;
+  try {
+    const res = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000) });
+    if (res.ok && (res.headers.get('content-type') ?? '').startsWith('image/')) return url;
+  } catch {}
+  return `https://krunker.io/img/noimg.png`;
+}
+
 async function getMapDetails(name: string): Promise<MapDetails> {
   const res = await fetch(`https://gapi.svc.krunker.io/api/map/${encodeURIComponent(name)}`, {
     headers: { 'X-Developer-API-Key': process.env.KRUNKER_API_KEY! },
@@ -41,6 +50,7 @@ async function getMapDetails(name: string): Promise<MapDetails> {
 }
 
 async function sendNotif(data: MapDetails) {
+  const thumb = await resolveThumb(data.map_id);
   const payload = {
     username: 'MMOK',
     avatar_url: 'https://cdn.discordapp.com/avatars/1550020685869359177/9214bbb4eb6dd051005f985dea1e2ae3.webp?size=1024',
@@ -56,7 +66,7 @@ async function sendNotif(data: MapDetails) {
           { type: 10, content: data.description?.trim() || 'No description.' },
           { type: 14, divider: true, spacing: 2 },
           { type: 10, content: `Game Links: [Hub](https://krunker.io/social.html?p=map&q=${encodeURIComponent(data.name)}) | [Play](https://krunker.io/?play=${encodeURIComponent(data.name)})` },
-          { type: 12, items: [{ media: { url: `https://user-assets.krunker.io/m${data.map_id}/thumb.png` } }] },
+          { type: 12, items: [{ media: { url: thumb } }] },
           { type: 14, divider: true, spacing: 2 },
           { type: 10, content: `Name: ${data.name} | Creator: ${data.creator_name} | Plays: ${data.gameplays} | Likes: ${data.votes}` },
         ],
