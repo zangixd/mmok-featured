@@ -83,8 +83,8 @@ app.post('/webhooks/krunker', express.raw({ type: 'application/json' }), async (
 
     res.sendStatus(200);
   } catch (err) {
+    res.sendStatus(400);
     throw new Error(`${err}`);
-    return res.sendStatus(400);
   }
 });
 
