@@ -53,7 +53,7 @@ async function sendNotif(data: MapDetails) {
         components: [
           { type: 10, content: `## ${data.name} has been featured!\n<t:${Math.floor(Date.now() / 1000)}:f>` },
           { type: 14, divider: true, spacing: 2 },
-          { type: 10, content: data.description },
+          { type: 10, content: data.description?.trim() || 'No description.' },
           { type: 14, divider: true, spacing: 2 },
           { type: 10, content: `Game Links: [Hub](https://krunker.io/social.html?p=map&q=${encodeURIComponent(data.name)}) | [Play](https://krunker.io/?play=${encodeURIComponent(data.name)})` },
           { type: 12, items: [{ media: { url: `https://user-assets.krunker.io/m${data.map_id}/thumb.png` } }] },
