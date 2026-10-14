@@ -1,0 +1,29 @@
+{
+  "name": "mmok-featured",
+  "version": "1.0.0",
+  "description": "Webhook for the MMOK discord to post new featured changes",
+  "main": "./src/main.ts",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env ."
+  },
+  "keywords": [],
+  "author": "zangi@zangi.dev",
+  "license": "UNLICENSED",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.11.2",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.11.2",
+  "type": "module",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
