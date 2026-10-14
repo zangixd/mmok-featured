@@ -67,20 +67,25 @@ async function sendNotif(data: MapDetails) {
 }
 
 app.post('/webhooks/krunker', express.raw({ type: 'application/json' }), async (req, res) => {
-  const signature = req.header('Krunker-Signature');
-  const secret = process.env.WEBHOOK_SECRET;
+  try {
+    const signature = req.header('Krunker-Signature');
+    const secret = process.env.WEBHOOK_SECRET;
 
-  if (!signature || !secret) return res.sendStatus(400);
+    if (!signature || !secret) return res.sendStatus(400);
 
-  const raw = req.body.toString('utf8');
+    const raw = req.body.toString('utf8');
 
-  if (!verify(raw, signature, secret)) return res.sendStatus(401);
+    if (!verify(raw, signature, secret)) return res.sendStatus(401);
 
-  const event = JSON.parse(raw);
-  const mapDetails = await getMapDetails(event.data.map_name);
-  sendNotif(mapDetails);
+    const event = JSON.parse(raw);
+    const mapDetails = await getMapDetails(event.data.map_name);
+    sendNotif(mapDetails);
 
-  res.sendStatus(200);
+    res.sendStatus(200);
+  } catch (err) {
+    throw new Error(`${err}`);
+    return res.sendStatus(400);
+  }
 });
 
 app.listen(port);
