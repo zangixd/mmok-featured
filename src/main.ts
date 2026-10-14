@@ -35,6 +35,8 @@ async function getMapDetails(name: string): Promise<MapDetails> {
 }
 
 async function sendNotif(type: string, data: MapDetails) {
+  if (type !== 'map.featured') return;
+
   const payload = {
     'username': 'MMOK',
     'avatar_url': 'https://cdn.discordapp.com/avatars/1550020685869359177/9214bbb4eb6dd051005f985dea1e2ae3.webp?size=1024',
@@ -44,7 +46,7 @@ async function sendNotif(type: string, data: MapDetails) {
         'type': 17,
         'accent_color': 15990528,
         'components': [
-          { 'type': 10, 'content': `## ${data.name} has been ${type === 'map.featured' ? 'Featured!' : 'Unfeatured'}\n<t:${Date.now()}:f>` },
+          { 'type': 10, 'content': `## ${data.name} has been featured!\n<t:${Date.now()}:f>` },
           { 'type': 14, 'divider': true, 'spacing': 2 },
           { 'type': 10, 'content': data.description },
           { 'type': 14, 'divider': true, 'spacing': 2 },
