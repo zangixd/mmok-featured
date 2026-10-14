@@ -34,9 +34,7 @@ async function getMapDetails(name: string): Promise<MapDetails> {
   return res.json();
 }
 
-async function sendNotif(type: string, data: MapDetails) {
-  if (type !== 'map.featured') return;
-
+async function sendNotif(data: MapDetails) {
   const payload = {
     'username': 'MMOK',
     'avatar_url': 'https://cdn.discordapp.com/avatars/1550020685869359177/9214bbb4eb6dd051005f985dea1e2ae3.webp?size=1024',
@@ -80,7 +78,7 @@ app.post('/webhooks/krunker', express.raw({ type: 'application/json' }), async (
 
   const event = JSON.parse(raw);
   const mapDetails = await getMapDetails(event.data.map_name);
-  sendNotif(event.type, mapDetails);
+  sendNotif(mapDetails);
 
   res.sendStatus(200);
 });
